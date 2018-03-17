@@ -1260,22 +1260,20 @@ static void panel_toplevel_update_hide_buttons_size(GtkWidget* button, int panel
 	GtkWidget *arrow;
 	arrow = gtk_bin_get_child (GTK_BIN (button));
 
+	GtkSettings * settings;
+	settings = gtk_settings_get_default ();
+	gchar *gtk_theme_name;
+	g_object_get (settings, "gtk-theme-name", &gtk_theme_name, NULL);
+	css_provider = gtk_css_provider_get_named (gtk_theme_name, NULL);
+
+	g_free (gtk_theme_name);
+
+
 	/* set custom css */
 	if (panel_size < 30) {
 
 		gtk_css_provider_load_from_data (css_provider, ".panel-button {min-height: 13px; min-width: 13px; padding: 0px;}", -1, NULL);
-
-	/* get defaults from theme */
-	} else {
-		GtkSettings * settings;
-		settings = gtk_settings_get_default ();
-		gchar *gtk_theme_name;
-		g_object_get (settings, "gtk-theme-name", &gtk_theme_name, NULL);
-		css_provider = gtk_css_provider_get_named (gtk_theme_name, NULL);
-
-		g_free (gtk_theme_name);
-	}
-
+    }
 	gtk_style_context_add_provider (context, GTK_STYLE_PROVIDER (css_provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	/* set image size */
